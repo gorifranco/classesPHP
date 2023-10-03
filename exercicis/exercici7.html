@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>exercici7</title>
+</head>
+<body>
+<?php
+$data = date('j', time());
+$frase = "Avui som dia $data, ";
+$frase .= ($data % 2 ==0) ? "és parell" : "no és parell";
+echo $frase;
+?>
+</body>
+</html>
