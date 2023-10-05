@@ -1,27 +1,55 @@
 <?php
-echo "<table style='text-align: center; font-size: 15pt;'>";
-for ($i = 0; $i <= 10; $i++) {
-    echo "<tr>";
-    for ($j = 49; $j <= 60; $j++) {
-        $linea = "<td style='background: ";
-        if($j == 49 && $i == 0){
-            $linea .= "mediumpurple'/>";
-        }
-        else if($j == 49){
-            $linea .= "aquamarine'> $i </td>";
-        }
-        else if($i == 0){
-            $linea .= "aquamarine'> $j </td>";
-        }
-        else if($j % 2 == 0){
-            $linea .= "lightgreen'>".(($j % $i == 0) ? "*" : "-" ). "</td>";
-        }
-        else{
-            $linea .= "lemonchiffon'>".(($j % $i == 0) ? "*" : "-" )."</td>";
-        }
-        echo $linea;
-    }
-    echo "</tr>";
+
+$alumnes= array ("1122"=>
+
+    array("nom"=>"Pep",
+
+        "telefons"=>array("971223344"," 666778877"),
+
+        "grup"=>"S1X",
+
+        "dir"=>array("carrer"=>"Nou","Num"=>12,"CP"=>"07300","Poblacio"=>"Inca"),
+
+        "notes"=>array("client"=>7,"seridor"=>8,"disseny"=>5,"desplegament"=>7)
+
+    ),
+
+    "1192"=>
+
+        array("nom"=>"Joan",
+
+            "telefons"=>array("699775544"),
+
+            "grup"=>"S1G",
+
+            "dir"=>array("carrer"=>"Major","Num"=>1,"CP"=>"07440","Poblacio"=>"Muro"),
+
+            "notes"=>array("client"=>6,"seridor"=>5,"disseny"=>5)
+
+        ),
+
+    "1982"=>
+
+        array("nom"=>"Miquel",
+
+            "telefons"=>array("971889977","666000077"),
+
+            "grup"=>"S1X",
+
+            "dir"=>array("carrer"=>"Sa plasa","Num"=>6,"CP"=>"07300","Poblacio"=>"Inca"),
+
+            "notes"=>array("client"=>9,"seridor"=>10,"disseny"=>8,"desplegament"=>6)
+
+        )
+
+);
+
+echo "<br>".$alumnes["1122"]["grup"];
+echo "<br> telefons: ";
+foreach ($alumnes["1982"]["telefons"] as $tf){
+    echo "<br>".$tf;
 }
-echo "</table>";
-?>
+echo "<br>";
+foreach ($alumnes as $i =>$al){
+    echo "<br>Codi: ".$i." Nom: ".$al["nom"]." Grup: ".$al["grup"];
+}
