@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>arrays1</title>
+</head>
+<body>
+<?php
+$EUROPE = array( "Italy"=>"Rome", "Luxembourg"=>"Luxembourg", "Belgium"=> "Brussels",
+"Denmark"=>"Copenhagen","Finland"=>"Helsinki", "France" => "Paris",
+"Slovakia"=>"Bratislava", "Slovenia"=>"Ljubljana", "Germany" => "Berlin", "Greece" =>
+"Athens","Ireland"=>"Dublin", "Netherlands"=>"Amsterdam","Portugal"=>"Lisbon",
+"Spain"=>"Madrid", "Sweden"=>"Stockholm", "United
+Kingdom"=>"London","Cyprus"=>"Nicosia", "Lithuania"=>"Vilnius","Czech
+Republic"=>"Prague", "Estonia"=>"Tallin", "Hungary"=>"Budapest", "Latvia"=>"Riga",
+"Malta"=>"Valetta","Austria" => "Vienna", "Poland"=>"Warsaw");
+
+echo "Ordenat per capital: <br/>";
+asort($EUROPE);
+foreach ($EUROPE as $item => $aa){
+echo "<br>La capital de $item és $aa";
+}
+
+echo "Ordenat per pais: <br/>";
+ksort($EUROPE);
+foreach ($EUROPE as $item => $aa){
+echo "<br>La capital de $item és $aa";
+}
+?>
+</body>
+</html>
