@@ -14,8 +14,24 @@ echo "<tr><td>Total</td><td>$total</td></tr>";
 echo "</table>";
 
 echo "<br>Exercici b)<br>";
-asort($CIUTATS);
+
+array_multisort(array_column($CIUTATS, 'Illa'),  SORT_ASC,
+    array_column($CIUTATS, 'Habitants'), SORT_ASC,
+    $CIUTATS);
+
+$last = array_key_first($CIUTATS);
+$t = 0;
+
+echo "<table>";
 foreach ($CIUTATS as $item => $cc){
+    if($last !== $cc["Illa"]){
+        echo "<tr><td style='row-span: 2;'>Suma de $last: $t</td></tr>";
+        $t = 0;
+    }
     echo "<tr><td>$item</td><td>".$cc["Habitants"]."</td><td>".$cc["Illa"]."</td></tr>";
+    $t += $cc["Habitants"];
+    $last = $cc["Illa"];
 }
+echo "<tr><td style='row-span: 2;'>Suma de $last: $t</td></tr>";
+echo "</table>";
 ?>
