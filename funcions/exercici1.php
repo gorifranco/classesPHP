@@ -32,7 +32,7 @@ function montarSelect($array, $nomSelect,$fraseLabel, $valorInicial, $multivalue
     echo '<select name="'.$nomSelect.'[ ]"'.(($multivalue)?' multiple="multiple"':'').'>';
 
     foreach ($array as $value) {
-    echo ' <option value="'.$value.(($valorInicial == $value)?' selected':'').'">'.$value.'</option>';
+    echo ' <option'.(($valorInicial == $value)?' value="0">':'>').$value.'</option>';
     }
     echo '</select>';
     echo '</label>';
