@@ -4,7 +4,7 @@ session_start();
 if (isset($_SESSION["llista"])) {
     if (isset($_POST["item"]) && $_POST["item"] != '') array_push($_SESSION["llista"], $_POST["item"]);
 }
-if(count($_SESSION["llista"]) > 0){
+if (count($_SESSION["llista"]) > 0) {
     for ($i = 0; $i < count($_SESSION["llista"]); $i++) {
         if (isset($_POST[$_SESSION["llista"][$i]])) {
             unset($_SESSION["llista"][$i]);
