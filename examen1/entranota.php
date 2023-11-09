@@ -6,9 +6,6 @@ if(isset($_POST["nou"])){
     echo "Alumne nou";
 }
 
-if(!isset($_SESSION["moduls"]))
-$_SESSION["moduls"] = 1;
-
 if(!isset($_SESSION["notes"])) $_SESSION["notes"] = [];
 
 if(isset($_POST["afegirModul"])) ++$_SESSION["moduls"];
