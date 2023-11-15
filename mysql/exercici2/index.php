@@ -5,36 +5,60 @@ session_start();
 $_SESSION["selected"] = (isset($_GET["sentit"]))?$_GET["ordre"].$_GET["sentit"]:"idasc";
 $_SESSION["sentit"] = (isset($_GET["sentit"]))?$_GET["sentit"]:"asc";
 $_SESSION["ordre"] = (isset($_GET["ordre"]))?$_GET["ordre"]:"id";
+$_SESSION["limit"] = 10;
+if(!isset($_SESSION["offset"])) $_SESSION["offset"] = 0;
+if(isset($_GET["pg"])){
+    if($_GET["pg"] == "darrera"){
+        $_SESSION["offset"] = floor($_SESSION["totalTuples"]/$_SESSION["limit"])*$_SESSION["limit"];
+    }else {
+        $_SESSION["offset"] = ($_GET["pg"] - 1) * $_SESSION["limit"];
+    }
+}
+
 
 if(isset($_GET["ordre"]) && $_GET["ordre"] == "editor") $_SESSION["ordre"] = "nom_edit";
 if(isset($_SESSION["filtre"])){
     if(isset($_GET["filtre"])){
         $_SESSION["filtre"] = $_GET["filtre"];
+        $_SESSION["offset"] = 0;
     }
 }else{
     $_SESSION["filtre"] = "";
 }
 
 $_SESSION["arrayFiles"] = treureLlibres();
+totalTuples();
 
+function totalTuples(){
+    $connexio = new Mysqli();
+    $connexio->connect("localhost", "root", "1234", "biblioteca", 3306);
+
+    $sql = "select count(*) as total from llibres
+        right join editors on editors.id_edit = llibres.fk_idedit
+        where id_llib like '%{$_SESSION["filtre"]}%' or titol like '%{$_SESSION["filtre"]}%' or nom_edit like '%{$_SESSION["filtre"]}%'";
+    $prepared = $connexio->prepare($sql);
+
+    $prepared->execute();
+    $result_set = $prepared->get_result();
+    $_SESSION["totalTuples"] = ($result_set->fetch_assoc())["total"];
+    $prepared->close();
+    $connexio->close();
+
+}
 function treureLlibres()
 {
     $connexio = new Mysqli();
     $connexio->connect("localhost", "root", "1234", "biblioteca", 3306);
 
     $sql = "select id_llib as id, titol, nom_edit from llibres
-        inner join editors on editors.id_edit = llibres.fk_idedit
-        where id like %'{$_SESSION["filtre"]}'% or titol like %'{$_SESSION["filtre"]}'% or nom_edit like %'{$_SESSION["filtre"]}'% 
-        order by {$_SESSION["ordre"]} {$_SESSION["sentit"]} limit 10 offset 0";
-
-
+        right join editors on editors.id_edit = llibres.fk_idedit
+        where id_llib like '%{$_SESSION["filtre"]}%' or titol like '%{$_SESSION["filtre"]}%' or nom_edit like '%{$_SESSION["filtre"]}%' 
+        order by {$_SESSION["ordre"]} {$_SESSION["sentit"]} limit {$_SESSION["limit"]} offset {$_SESSION["offset"]}";
 
     $prepared = $connexio->prepare($sql);
 
-
     $prepared->execute();
     $result_set = $prepared->get_result();
-
 
     $array = array();
 
@@ -55,6 +79,23 @@ function imprimirFilesTabla($arrayFiles)
     }
 }
 
+function imprimirPaginacio()
+{
+    if ($_SESSION["offset"] == 0 || $_SESSION["offset"] == $_SESSION["limit"]) {
+        $valors = [1, 2, 3];
+    } else if ($_SESSION["offset"] >= $_SESSION["totalTuples"] - (2 * $_SESSION["limit"])) {
+        $valors = [ceil($_SESSION["totalTuples"] / $_SESSION["limit"]) - 2, ceil($_SESSION["totalTuples"] / $_SESSION["limit"]) - 1, ceil($_SESSION["totalTuples"] / $_SESSION["limit"])];
+    } else {
+        $valors = [$_SESSION["offset"] / $_SESSION["limit"] , $_SESSION["offset"] / $_SESSION["limit"] +1, $_SESSION["offset"] / $_SESSION["limit"] + 2];
+    }
+
+    echo "<li class=page-item><a class=page-link href=index.php?pg=1 aria-label='first page' style='vertical-align: middle'>&laquo;</a></li>";
+    echo "<li class=page-item><a class=page-link href=index.php?pg={$valors[0]} aria-label='first page' style='vertical-align: middle'>{$valors[0]}</a></li>";
+    echo "<li class=page-item><a class=page-link href=index.php?pg={$valors[1]} aria-label='first page' style='vertical-align: middle'>{$valors[1]}</a></li>";
+    echo "<li class=page-item><a class=page-link href=index.php?pg={$valors[2]} aria-label='first page' style='vertical-align: middle'>{$valors[2]}</a></li>";
+    echo "<li class=page-item><a class=page-link href=index.php?pg=darrera aria-label='first page' style='vertical-align: middle'>&raquo;</a></li>";
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="ca">
@@ -71,7 +112,6 @@ function imprimirFilesTabla($arrayFiles)
     thead {
         text-align: center;
     }
-
 
 </style>
 
@@ -96,13 +136,17 @@ function imprimirFilesTabla($arrayFiles)
             <th>Editorial<a href="index.php?sentit=asc&ordre=editor" class="btn <?php echo($_SESSION["selected"]=="editorasc")?"btn-primary":"btn-secundary"?>" style="margin-left: 5px">&#8593</a>
                 <a href="index.php?sentit=desc&ordre=editor" class="btn <?php echo($_SESSION["selected"]=="editordesc")?"btn-primary":"btn-secundary"?>">&#8595</a></th>
             <th style="vertical-align: middle">Acció</th>
-
         </tr>
         </thead>
         <tbody>
         <?php imprimirFilesTabla($_SESSION["arrayFiles"]) ?>
         </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+<?php imprimirPaginacio()?>
+        </ul>
+    </nav>
 </div>
 </body>
 </html>
