@@ -68,7 +68,7 @@ function optionsEditorial()
             </div>
             <div class="form-group col-md-8">
                 <label for="titol">Títol</label>
-                <input name="titol" type="text" class="form-control" id="titol" placeholder="titol"
+                <input name="titol" type="text" class="form-control" id="   titol" placeholder="titol"
                        value="<?= $_SESSION["dades"]["titol"] ?>">
             </div>
         </div>
