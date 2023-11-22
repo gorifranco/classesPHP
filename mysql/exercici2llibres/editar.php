@@ -9,7 +9,7 @@ if(!isset($_GET["id"]) || $_GET["id"] == ""){
 
 if (isset($_POST["submit"])) {
     if(DBConnection::updateLlibre($_GET["id"], $_POST["titol"],
-        DBConnection::id_edit_where_nom_edit($_POST["editorial"]) , $_POST["departament"], $_POST["llocedicio"])){
+        $_POST["editorial"] , $_POST["departament"], $_POST["llocedicio"])){
         echo "<script>alert('Upate realitzat amb èxit')</script>";
     }else{
         echo "<script>alert('Error canviant les dades')</script>";
